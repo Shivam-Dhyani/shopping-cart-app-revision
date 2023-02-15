@@ -7,7 +7,7 @@ import {
 } from "react";
 import axios from "axios";
 import { faker } from "@faker-js/faker";
-import { cartReducer } from "../reducers/Reducer";
+import { cartReducer, productReducer } from "../reducers/Reducer";
 
 const Cart = createContext();
 
@@ -46,7 +46,18 @@ const Context = ({ children }) => {
     cart: [],
   });
 
-  return <Cart.Provider value={{ state, dispatch }}>{children}</Cart.Provider>;
+  const [productState, productDispatch] = useReducer(productReducer, {
+    byStock: false,
+    byFastDelivery: false,
+    byRating: 0,
+    searchQuery: "",
+  });
+
+  return (
+    <Cart.Provider value={{ state, dispatch, productState, productDispatch }}>
+      {children}
+    </Cart.Provider>
+  );
 };
 
 // Default Export

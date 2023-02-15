@@ -5,7 +5,13 @@ const Rating = (props) => {
   return (
     <>
       {[...Array(5)].map((_, idx) => (
-        <span key={idx} onClick={() => onClick(idx)} style={style}>
+        <span
+          key={idx}
+          onClick={() => {
+            onClick(idx);
+          }}
+          style={style}
+        >
           {rating > idx ? (
             <AiFillStar fontSize="15px" />
           ) : (
