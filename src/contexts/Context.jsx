@@ -14,42 +14,60 @@ const Cart = createContext();
 const Context = ({ children }) => {
   // const [productList, setProductList] = useState([]);
 
-  // useEffect(async () => {
-  //   const { CartState } = useContext(Cart);
-  //   const { dispatch } = CartState;
-  //   await axios
-  //     .get("https://fakestoreapi.com/products?limit=10")
-  //     .then((response) => {
-  //       dispatch({
-  //         type: "PRODUCT_LIST_ADDED",
-  //         payload: response.data,
-  //       });
-  //       // setProductList(response.data);
-  //     });
-  // }, []);
-
-  faker.seed(2023);
-
   const inStockValueArray = [0, 3, 5, 6, 7];
   const ratingsValueArray = [1, 2, 3, 4, 5];
 
-  const productList = [...Array(20)].map(() => {
-    return {
-      id: faker.datatype.uuid(),
-      name: faker.commerce.productName(),
-      price: faker.commerce.price(),
-      image: faker.image.image(),
-      inStock:
-        inStockValueArray[Math.floor(Math.random() * inStockValueArray.length)],
-      fastDelivery: Math.floor(Math.random() * 2),
-      ratings:
-        ratingsValueArray[Math.floor(Math.random() * ratingsValueArray.length)],
-    };
-  });
+  const apiCall = async () => {
+    await axios
+      .get("https://fakestoreapi.com/products?limit=10")
+      .then((response) => {
+        const products = [...response.data];
+        products.map((prod, idx) => {
+          products[idx] = {
+            id: prod.id,
+            name: prod.title,
+            price: prod.price,
+            image: prod.image,
+            inStock:
+              inStockValueArray[
+                Math.floor(Math.random() * inStockValueArray.length)
+              ],
+            fastDelivery: Math.floor(Math.random() * 2),
+            ratings:
+              ratingsValueArray[
+                Math.floor(Math.random() * ratingsValueArray.length)
+              ],
+          };
+        });
+        console.log(products);
+        dispatch({
+          type: "PRODUCT_LIST_ADDED",
+          payload: products,
+        });
+        // setProductList(response.data);
+      });
+  };
+
+  faker.seed(2023);
+
+  // const productList = [...Array(20)].map(() => {
+  //   return {
+  //     id: faker.datatype.uuid(),
+  //     name: faker.commerce.productName(),
+  //     price: faker.commerce.price(),
+  //     image: faker.image.image(),
+  // inStock:
+  //   inStockValueArray[Math.floor(Math.random() * inStockValueArray.length)],
+  // fastDelivery: Math.floor(Math.random() * 2),
+  // ratings:
+  //   ratingsValueArray[Math.floor(Math.random() * ratingsValueArray.length)],
+  //   };
+  // });
 
   const [state, dispatch] = useReducer(cartReducer, {
-    productList,
+    productList: [],
     cart: [],
+    apiCall,
   });
 
   const [productState, productDispatch] = useReducer(productReducer, {
@@ -60,7 +78,9 @@ const Context = ({ children }) => {
   });
 
   return (
-    <Cart.Provider value={{ state, dispatch, productState, productDispatch }}>
+    <Cart.Provider
+      value={{ state, dispatch, productState, productDispatch, apiCall }}
+    >
       {children}
     </Cart.Provider>
   );

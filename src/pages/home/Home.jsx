@@ -1,12 +1,19 @@
+import { useEffect } from "react";
 import Filter from "../../components/filters/Filter";
 import SingleProduct from "../../components/singleProduct/SingleProduct";
 import { CartState } from "../../contexts/Context";
 
 const Home = () => {
   const {
-    state: { productList },
+    state: { productList, apiCall },
     productState: { byStock, byFastDelivery, byRating, sort, searchQuery },
   } = CartState();
+
+  useEffect(() => {
+    apiCall();
+  }, []);
+
+  console.log(productList);
 
   const transformProducts = () => {
     let sortedProducts = productList;
@@ -40,7 +47,6 @@ const Home = () => {
     return sortedProducts;
   };
 
-  console.log(productList);
   return (
     <div className="home">
       <Filter />
