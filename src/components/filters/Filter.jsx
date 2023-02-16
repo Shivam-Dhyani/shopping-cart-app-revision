@@ -5,11 +5,11 @@ import Rating from "../rating/Rating";
 
 const Filter = () => {
   const {
-    productState: { byStock, byFastDelivery, byRating, sort },
+    productState: { byStock, byFastDelivery, byRating, sort, searchQuery },
     productDispatch,
   } = CartState();
 
-  console.log(byStock, byFastDelivery, byRating, sort);
+  console.log(byStock, byFastDelivery, byRating, sort, searchQuery);
 
   return (
     <div className="filters">
@@ -53,7 +53,7 @@ const Filter = () => {
           name="group1"
           type="checkbox"
           id={`inline-3`}
-          onChange={() => productDispatch({ type: "FILTER_BY_SEARCH" })}
+          onChange={() => productDispatch({ type: "FILTER_BY_STOCK" })}
           checked={byStock}
         />
       </span>

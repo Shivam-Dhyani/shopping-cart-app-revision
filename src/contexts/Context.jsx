@@ -14,25 +14,31 @@ const Cart = createContext();
 const Context = ({ children }) => {
   // const [productList, setProductList] = useState([]);
 
-  // useEffect(() => {
-  //   const apiCall = async () => {
-  //     await axios
-  //       .get("https://fakestoreapi.com/products?limit=10")
-  //       .then((response) => {
-  //         setProductList(response.data);
+  // useEffect(async () => {
+  //   const { CartState } = useContext(Cart);
+  //   const { dispatch } = CartState;
+  //   await axios
+  //     .get("https://fakestoreapi.com/products?limit=10")
+  //     .then((response) => {
+  //       dispatch({
+  //         type: "PRODUCT_LIST_ADDED",
+  //         payload: response.data,
   //       });
-  //   };
-  //   apiCall();
+  //       // setProductList(response.data);
+  //     });
   // }, []);
+
+  faker.seed(2023);
 
   const inStockValueArray = [0, 3, 5, 6, 7];
   const ratingsValueArray = [1, 2, 3, 4, 5];
+
   const productList = [...Array(20)].map(() => {
     return {
       id: faker.datatype.uuid(),
       name: faker.commerce.productName(),
       price: faker.commerce.price(),
-      image: faker.image.business(),
+      image: faker.image.image(),
       inStock:
         inStockValueArray[Math.floor(Math.random() * inStockValueArray.length)],
       fastDelivery: Math.floor(Math.random() * 2),
