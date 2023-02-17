@@ -1,16 +1,19 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Spinner } from "react-bootstrap";
 import Filter from "../../components/filters/Filter";
 import SingleProduct from "../../components/singleProduct/SingleProduct";
 import { CartState } from "../../contexts/Context";
 
 const Home = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const {
     state: { productList, apiCall },
     productState: { byStock, byFastDelivery, byRating, sort, searchQuery },
   } = CartState();
 
   useEffect(() => {
-    apiCall();
+    setIsLoading(true);
+    apiCall(setIsLoading, isLoading);
   }, []);
 
   console.log(productList);
@@ -51,9 +54,23 @@ const Home = () => {
     <div className="home">
       <Filter />
       <div className="productContainer">
-        {transformProducts().map((product, index) => (
-          <SingleProduct product={product} key={index} />
-        ))}
+        {isLoading ? (
+          <Spinner
+            style={{
+              marginTop: "10%",
+              width: "400px",
+              height: "400px",
+            }}
+            animation="border"
+            variant="primary"
+          />
+        ) : (
+          <>
+            {transformProducts().map((product, index) => (
+              <SingleProduct product={product} key={index} />
+            ))}
+          </>
+        )}
       </div>
     </div>
   );

@@ -9,14 +9,22 @@ const SingleProduct = (props) => {
   } = CartState();
 
   const { product, index } = props;
+
+  console.log(product);
   return (
     <div key={index} className="products">
       <Card>
-        <Card.Img variant="top" src={product.image} alt={product.name} />
+        <Card.Img
+          variant="top"
+          src={product.image}
+          alt={product.name}
+          style={{ height: "300px" }}
+          className="p-4"
+        />
         <Card.Body>
           <Card.Title>{product.name}</Card.Title>
           <Card.Subtitle>
-            <span>₹ {product.price.split(".")[0]}</span>
+            <span>₹ {Math.round(product.price)}</span>
             {product.fastDelivery ? (
               <div>FastDelivery</div>
             ) : (
